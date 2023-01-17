@@ -3,4 +3,5 @@ node_modules/
 /playwright-report/
 /Screenshots/
 /tests-examples/
+/tests/*.js
 /playwright/.cache/
