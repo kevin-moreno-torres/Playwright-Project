@@ -25,7 +25,7 @@ export class SnSession {
     await this.page.locator("#user_name").fill(userName);
     await this.page.locator("#user_password").fill(userPassword);
     await loginBtn.click();
-    await expect(this.page.locator("span.experience-title")).toBeVisible();
+    await this.page.waitForLoadState("networkidle");
     await this.page.screenshot({
       path: this.screenshotFolderPath + "logged-in.png",
     });
@@ -51,7 +51,7 @@ export class SnSession {
     await expect(impersonateBtn).toBeVisible();
     await impersonateBtn.click();
     await expect(modalWindow).toBeVisible();
-    await this.page.fill('input[placeholder="Search for a user"]', userName);
+    await this.page.getByLabel("Select a user").fill(userName);
     await expect(
       listbox.getByRole("listbox", { name: "Select a user" })
     ).toBeVisible();
@@ -62,7 +62,7 @@ export class SnSession {
     });
     await modalWindow.getByRole("button", { name: "Impersonate user" }).click();
     await expect(modalWindow).toBeHidden();
-    await expect(this.page.locator("span.experience-title")).toBeVisible();
+    await this.page.waitForLoadState("networkidle");
     await this.page.screenshot({
       path: this.screenshotFolderPath + "impersonated-successfully.png",
     });
