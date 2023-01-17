@@ -1,7 +1,7 @@
 // @ts-check
-const { expect } = require("@playwright/test");
+import { expect } from "@playwright/test";
 
-exports.PlaywrightSN = class PlaywrightSN {
+export class SnSession {
   /**
    * @param {import('@playwright/test').Page} page
    * @param {any} screenshotFolderPath
@@ -9,13 +9,6 @@ exports.PlaywrightSN = class PlaywrightSN {
   constructor(page, screenshotFolderPath) {
     this.page = page;
     this.screenshotFolderPath = screenshotFolderPath;
-  }
-
-  /**
-   * @param {string} instanceUrl
-   */
-  async goToInstance(instanceUrl) {
-    await this.page.goto(instanceUrl);
   }
 
   /**
@@ -74,4 +67,4 @@ exports.PlaywrightSN = class PlaywrightSN {
       path: this.screenshotFolderPath + "impersonated-successfully.png",
     });
   }
-};
+}
