@@ -56,6 +56,6 @@ async function ImpersonateUser(userName) {
   await expect(modalWindow).toBeHidden();
   await expect(pageObj.locator("span.experience-title")).toBeVisible();
   await pageObj.screenshot({
-    path: SCREENSHOT_PATH + "impersonated-successfull.png",
+    path: SCREENSHOT_PATH + "impersonated-successfully.png",
   });
 }
