@@ -24,9 +24,10 @@ export class SnNavigation {
 
   /**
    * @param {string} moduleName
+   * @param {string} menuItem
    * @param {boolean} [isOpenedInNewTab]
    */
-  async navigateToCSMModule(moduleName, isOpenedInNewTab) {
+  async navigateToCSMModule(moduleName, menuItem, isOpenedInNewTab) {
     const headerMenu = this.page.locator(
       "div.sn-polaris-navigation.polaris-header-menu"
     );
@@ -36,28 +37,28 @@ export class SnNavigation {
     await this.page.locator("input#filter").click();
     await this.page.keyboard.press("Control+A");
     await this.page.keyboard.press("Backspace");
-    await this.page.fill("input#filter", moduleName);
+    await this.page.fill("input#filter", menuItem);
+    const moduleItem = this.page
+      .locator("sn-collapsible-list")
+      .filter({ hasText: new RegExp(moduleName) });
     if (isOpenedInNewTab) {
       //  ➚ (opens in a new tab)
-      await this.page
-        .locator("span.menu-item-row")
+      await moduleItem
         .getByRole("menuitem", {
-          name: moduleName + " ➚ (opens in a new tab)",
+          name: menuItem + " ➚ (opens in a new tab)",
           exact: true,
         })
         .click();
-    } else {
-      await this.page
-        .locator("span.menu-item-row")
-        .getByRole("menuitem", { name: moduleName, exact: true })
-        .click();
-    }
-    /* if (isOpenedInNewTab) {
       const pagePromise = this.browserContext.waitForEvent("page");
       const newPage = await pagePromise;
       await newPage.waitForLoadState("networkidle");
-      console.log(await newPage.title());
-    } */
+      this.page = newPage;
+    } else {
+      await moduleItem
+        .getByRole("menuitem", { name: menuItem, exact: true })
+        .click();
+    }
+
     await this.page.waitForTimeout(1000);
     await expect(this.page.locator("span.experience-title")).toBeVisible();
     await this.page.screenshot({
