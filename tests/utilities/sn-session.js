@@ -26,6 +26,7 @@ export class SnSession {
     await this.page.locator("#user_password").fill(userPassword);
     await loginBtn.click();
     await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
     await this.page.screenshot({
       path: this.screenshotFolderPath + "logged-in.png",
     });
@@ -63,6 +64,7 @@ export class SnSession {
     await modalWindow.getByRole("button", { name: "Impersonate user" }).click();
     await expect(modalWindow).toBeHidden();
     await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
     await this.page.screenshot({
       path: this.screenshotFolderPath + "impersonated-successfully.png",
     });

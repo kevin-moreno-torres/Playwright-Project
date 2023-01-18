@@ -19,6 +19,7 @@ export class SnNavigation {
   async goToInstance(instanceUrl) {
     await this.page.goto(instanceUrl);
     await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
   }
 
   /**
@@ -33,20 +34,31 @@ export class SnNavigation {
     await expect(headerMenu).toBeVisible();
     await headerMenu.getByRole("button", { name: "All" }).click();
     await this.page.locator("input#filter").click();
-    await this.page.keyboard.press("Meta+A");
+    await this.page.keyboard.press("Control+A");
     await this.page.keyboard.press("Backspace");
     await this.page.fill("input#filter", moduleName);
-    await this.page
-      .locator("span.menu-item-row")
-      .getByRole("menuitem", { name: moduleName, exact: true })
-      .click();
+    if (isOpenedInNewTab) {
+      //  ➚ (opens in a new tab)
+      await this.page
+        .locator("span.menu-item-row")
+        .getByRole("menuitem", {
+          name: moduleName + " ➚ (opens in a new tab)",
+          exact: true,
+        })
+        .click();
+    } else {
+      await this.page
+        .locator("span.menu-item-row")
+        .getByRole("menuitem", { name: moduleName, exact: true })
+        .click();
+    }
     /* if (isOpenedInNewTab) {
       const pagePromise = this.browserContext.waitForEvent("page");
       const newPage = await pagePromise;
       await newPage.waitForLoadState("networkidle");
       console.log(await newPage.title());
     } */
-    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
     await expect(this.page.locator("span.experience-title")).toBeVisible();
     await this.page.screenshot({
       path: this.screenshotFolderPath + "navigate-all-menu.png",
